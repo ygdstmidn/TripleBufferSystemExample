@@ -1,10 +1,6 @@
-# NUCLEO_F446RE_CubeIDE_template
+# TripleBufferSystemExample
 ## 概要
-NUCLEO_F446REのCubeIDEのテンプレートプロジェクトです．\
-GitHubのテンプレート機能を使って，新しいプロジェクトを作成した後，Scripts内のrenameProject.pyを実行することで，iocファイルの名前等を変更することができます．
->[!NOTE]
->↑この概要は新しいプロジェクト作成後に削除し，新しくプロジェクトの概要を記述してください．\
->また，ファイル先頭のプロジェクト名の部分も変更してください
+TripleBufferSystemのサンプルプログラム
 
 | 項目         | 仕様             |
 | ------------ | ---------------- |
