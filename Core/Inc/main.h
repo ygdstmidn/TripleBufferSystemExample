@@ -33,6 +33,7 @@ extern "C" {
 /* USER CODE BEGIN Includes */
 #include "app.h"
 #include <stdio.h>
+#include "TripleBufferSystem/TripleBufferSystem.h"
 
 /* USER CODE END Includes */
 
