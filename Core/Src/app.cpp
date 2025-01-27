@@ -21,7 +21,7 @@ extern "C"
         setbuf(stdout, NULL);
         printf("Hello World!!\n");
         TripleBufferSystem_Init(&tbsPcUart, PC_UART_BUFFER_SIZE);
-        TripleBufferSystem_set_irq(&tbsPcUart, tbsPcUartAfterSwap, __disable_irq);
+        TripleBufferSystem_setFunc(&tbsPcUart, __disable_irq, tbsPcUartAfterSwap);
         HAL_UART_Receive_IT(&huart2, TripleBufferSystem_NextWriteBuffer(tbsPcUart), 1); // 1byte
     }
 
@@ -54,7 +54,7 @@ extern "C"
                 __disable_irq();
                 TripleBufferSystem_Destroy(&tbsPcUart);
                 TripleBufferSystem_Init(&tbsPcUart, PC_UART_BUFFER_SIZE);
-                TripleBufferSystem_set_irq(&tbsPcUart, tbsPcUartAfterSwap, __disable_irq);
+                TripleBufferSystem_setFunc(&tbsPcUart, __disable_irq, tbsPcUartAfterSwap);
                 __enable_irq();
             }
 
