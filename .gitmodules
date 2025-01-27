@@ -1,0 +1,3 @@
+[submodule "Core/Inc/TripleBufferSystem"]
+	path = Core/Inc/TripleBufferSystem
+	url = https://github.com/ygdstmidn/TripleBufferSystem.git
