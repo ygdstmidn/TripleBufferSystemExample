@@ -24,6 +24,9 @@ TripleBufferSystemのサンプルプログラム
 |      |      |      |
 
 ## 変更した設定
+### usart2
+#### NVIC Settings
+USART2 global interrupt ✅
 
 ## プログラム概要
 ### setup()
