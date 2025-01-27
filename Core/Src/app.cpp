@@ -6,8 +6,8 @@ extern "C"
 #endif
 
 #include "main.h"
-
-    extern UART_HandleTypeDef huart2;
+#include "gpio.h"
+#include "usart.h"
 
     // MARK:setup
     void user_setup(void)
