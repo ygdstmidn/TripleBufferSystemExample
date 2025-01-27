@@ -13,16 +13,20 @@ extern "C"
 
 #define PC_UART_BUFFER_SIZE 1024
 
-    TripleBufferSystem tbsPcUart;
+    // TripleBufferSystem tbsPcUart;
+    TripleBufferSystemClass tbsPcUart;
 
     // MARK:setup
     void user_setup(void)
     {
         setbuf(stdout, NULL);
         printf("Hello World!!\n");
-        TripleBufferSystem_Init(&tbsPcUart, PC_UART_BUFFER_SIZE);
-        TripleBufferSystem_setFunc(&tbsPcUart, __disable_irq, tbsPcUartAfterSwap);
-        HAL_UART_Receive_IT(&huart2, TripleBufferSystem_NextWriteBuffer(tbsPcUart), 1); // 1byte
+        // TripleBufferSystem_Init(&tbsPcUart, PC_UART_BUFFER_SIZE);
+        // TripleBufferSystem_setFunc(&tbsPcUart, __disable_irq, tbsPcUartAfterSwap);
+        // HAL_UART_Receive_IT(&huart2, TripleBufferSystem_NextWriteBuffer(tbsPcUart), 1); // 1byte
+        tbsPcUart.init(PC_UART_BUFFER_SIZE);
+        tbsPcUart.setFunc(__disable_irq, tbsPcUartAfterSwap);
+        HAL_UART_Receive_IT(&huart2, tbsPcUart.nextWriteBuffer(), 1); // 1byte
     }
 
     // MARK:loop
@@ -46,15 +50,19 @@ extern "C"
         {
             unsigned char receiveData[PC_UART_BUFFER_SIZE];
             int tbsPcUartError;
-            const size_t receiveDataLength = TripleBufferSystem_Read(&tbsPcUart, receiveData, PC_UART_BUFFER_SIZE, &tbsPcUartError);
+            // const size_t receiveDataLength = TripleBufferSystem_Read(&tbsPcUart, receiveData, PC_UART_BUFFER_SIZE, &tbsPcUartError);
+            const size_t receiveDataLength = tbsPcUart.read(receiveData, PC_UART_BUFFER_SIZE, &tbsPcUartError);
 
             if (receiveDataLength == 0 && tbsPcUartError == 1)
             {
                 printf("Buffer Full!!\n");
                 __disable_irq();
-                TripleBufferSystem_Destroy(&tbsPcUart);
-                TripleBufferSystem_Init(&tbsPcUart, PC_UART_BUFFER_SIZE);
-                TripleBufferSystem_setFunc(&tbsPcUart, __disable_irq, tbsPcUartAfterSwap);
+                // TripleBufferSystem_Destroy(&tbsPcUart);
+                // TripleBufferSystem_Init(&tbsPcUart, PC_UART_BUFFER_SIZE);
+                // TripleBufferSystem_setFunc(&tbsPcUart, __disable_irq, tbsPcUartAfterSwap);
+                tbsPcUart.destroy();
+                tbsPcUart.init(PC_UART_BUFFER_SIZE);
+                tbsPcUart.setFunc(__disable_irq, tbsPcUartAfterSwap);
                 tbsPcUartAfterSwap();
             }
 
@@ -92,8 +100,10 @@ extern "C"
     {
         if (huart == &huart2)
         {
-            TripleBufferSystem_HeadMove(&tbsPcUart);
-            HAL_UART_Receive_IT(&huart2, TripleBufferSystem_NextWriteBuffer(tbsPcUart), 1);
+            // TripleBufferSystem_HeadMove(&tbsPcUart);
+            // HAL_UART_Receive_IT(&huart2, TripleBufferSystem_NextWriteBuffer(tbsPcUart), 1);
+            tbsPcUart.headMove();
+            HAL_UART_Receive_IT(&huart2, tbsPcUart.nextWriteBuffer(), 1);
         }
     }
 
@@ -106,7 +116,8 @@ extern "C"
     void tbsPcUartAfterSwap(void)
     {
         HAL_UART_AbortReceive_IT(&huart2);
-        HAL_UART_Receive_IT(&huart2, TripleBufferSystem_NextWriteBuffer(tbsPcUart), 1); // 1byte
+        // HAL_UART_Receive_IT(&huart2, TripleBufferSystem_NextWriteBuffer(tbsPcUart), 1); // 1byte
+        HAL_UART_Receive_IT(&huart2, tbsPcUart.nextWriteBuffer(), 1); // 1byte
         __enable_irq();
     }
 
