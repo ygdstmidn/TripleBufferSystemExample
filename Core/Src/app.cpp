@@ -55,7 +55,7 @@ extern "C"
                 TripleBufferSystem_Destroy(&tbsPcUart);
                 TripleBufferSystem_Init(&tbsPcUart, PC_UART_BUFFER_SIZE);
                 TripleBufferSystem_setFunc(&tbsPcUart, __disable_irq, tbsPcUartAfterSwap);
-                __enable_irq();
+                tbsPcUartAfterSwap();
             }
 
             for (size_t i = 0; i < receiveDataLength; i++)
